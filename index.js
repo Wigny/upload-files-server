@@ -22,16 +22,14 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-app.post('/', upload.single('file'), function (req, res, next) {
+app.post('/', upload.single('file'), function (req, res) {
   const { mimetype, filename, size } = req.file
-  const url = `http://localhost:${PORT}/${filename}`;
 
   res.json({
     filename,
     mimetype,
-    url,
     size
   });
 });
