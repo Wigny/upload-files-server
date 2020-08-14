@@ -31,7 +31,7 @@ app.post('/', upload.single('file'), function (req, res) {
     filename,
     mimetype,
     size,
-    url: `${req.protocol}://${req.host}/uploads/${filename}`,
+    url: `${req.protocol}://${req.hostname}/uploads/${filename}`,
   });
 });
 
