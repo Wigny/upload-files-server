@@ -30,11 +30,16 @@ app.post('/', upload.single('file'), function (req, res) {
   res.json({
     filename,
     mimetype,
-    size
+    size,
+    url: `${req.protocol}://${req.host}/uploads/${filename}`,
   });
 });
 
-app.get('/', (_req, res) => res.send("running"));
+app.get('/', (_req, res) => res.sendFile(
+    path.join(__dirname, 'public', 'upload.html')
+));
+
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.listen(PORT, () =>
   console.log(`Running in ${PORT}`)
