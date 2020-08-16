@@ -3,6 +3,7 @@ const multer = require('multer');
 const uuidv4 = require('uuid/v4');
 const path = require('path');
 const cors = require('cors');
+const serveIndex = require('serve-index');
 
 const app = express()
 
@@ -40,6 +41,7 @@ app.get('/', (_req, res) => res.sendFile(
 ));
 
 app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use('/uploads', serveIndex(path.join(__dirname, '/uploads')));
 
 app.listen(PORT, () =>
   console.log(`Running in ${PORT}`)
