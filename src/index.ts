@@ -1,9 +1,9 @@
-import express from "express";
-import multer from 'multer';
-import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
 import cors from 'cors';
+import express from 'express';
+import multer from 'multer';
+import path from 'path';
 import serveIndex from 'serve-index';
+import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
 
@@ -21,14 +21,13 @@ const storage = multer.diskStorage({
     const filename = uuidv4() + path.extname(file.originalname);
 
     cb(null, filename);
-  }
+  },
 });
 
 const upload = multer({ storage });
 
-app.post('/', upload.single('file'), function (req, res) {
-  const { mimetype, filename, size } = req.file;
-  const { protocol, hostname } = req;
+app.post('/', upload.single('file'), ({ protocol, hostname, file }, res) => {
+  const { mimetype, filename, size } = file;
 
   res.json({
     filename,
@@ -39,12 +38,12 @@ app.post('/', upload.single('file'), function (req, res) {
 });
 
 app.get('/', (_req, res) => res.sendFile(
-  path.join(__dirname, '..', 'public', 'upload.html')
+  path.join(__dirname, '..', 'public', 'upload.html'),
 ));
 
 app.use('/uploads', express.static(uploadsPath));
 app.use('/uploads', serveIndex(uploadsPath));
 
 app.listen(PORT, () =>
-  console.log(`Running in ${PORT}`)
+  console.log(`Running in ${PORT}`),
 );
